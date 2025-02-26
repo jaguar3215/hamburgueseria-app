@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
@@ -12,8 +12,27 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  // Redirigir si ya está autenticado
+  useEffect(() => {
+    if (user) {
+      redirectUserByRole(user);
+    }
+  }, [user]);
+  
+  const redirectUserByRole = (userData) => {
+    if (userData.rol === 'administrador') {
+      navigate('/admin/dashboard');
+    } else if (userData.rol === 'cajero') {
+      navigate('/cajero/ventas');
+    } else if (userData.rol === 'cocinero') {
+      navigate('/cocinero/pedidos');
+    } else {
+      setError('El usuario no tiene un rol válido');
+    }
+  };
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,23 +50,14 @@ const Login = () => {
     try {
       const success = await login(credentials);
       
-      if (success) {
-        // Redirigir según el rol del usuario
-        const user = JSON.parse(localStorage.getItem('user'));
-        
-        if (user.rol === 'administrador') {
-          navigate('/admin/dashboard');
-        } else if (user.rol === 'cajero') {
-          navigate('/cajero/ventas');
-        } else if (user.rol === 'cocinero') {
-          navigate('/cocinero/pedidos');
-        }
-      } else {
+      if (!success) {
         setError('Credenciales inválidas');
       }
+      // No es necesario manejar la redirección aquí, el useEffect se encargará
+      // cuando el estado del usuario cambie
     } catch (err) {
-      setError('Error al iniciar sesión. Intente nuevamente.');
-      console.error(err);
+      console.error("Error en login:", err);
+      setError(`Error al iniciar sesión: ${err.message || 'Intente nuevamente'}`);
     } finally {
       setLoading(false);
     }

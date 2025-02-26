@@ -7,17 +7,33 @@ require('dotenv').config();
  */
 const verificarToken = (req, res, next) => {
   // Obtener el token del header
-  const token = req.headers['authorization']?.split(' ')[1];
-
-  if (!token) {
+  const authHeader = req.headers['authorization'];
+  
+  if (!authHeader) {
+    console.log('No se proporcionó header de autorización');
     return res.status(401).json({ 
+      success: false,
       message: 'No se proporcionó token de autenticación' 
     });
   }
+  
+  // Extraer el token
+  const tokenParts = authHeader.split(' ');
+  if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
+    console.log('Formato de token incorrecto:', authHeader);
+    return res.status(401).json({ 
+      success: false,
+      message: 'Formato de token incorrecto' 
+    });
+  }
+  
+  const token = tokenParts[1];
+  console.log('Token recibido:', token.substring(0, 15) + '...');
 
   try {
     // Verificar el token
     const decodificado = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Token verificado correctamente para usuario ID:', decodificado.id);
     
     // Guardar el ID del usuario en el objeto request
     req.usuarioId = decodificado.id;
@@ -26,10 +42,19 @@ const verificarToken = (req, res, next) => {
     
     next();
   } catch (error) {
+    console.error('Error verificando token:', error.name, error.message);
+    
     if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'El token ha expirado' });
+      return res.status(401).json({ 
+        success: false,
+        message: 'El token ha expirado' 
+      });
     }
-    return res.status(401).json({ message: 'Token inválido' });
+    
+    return res.status(401).json({ 
+      success: false,
+      message: 'Token inválido' 
+    });
   }
 };
 
@@ -40,13 +65,17 @@ const verificarToken = (req, res, next) => {
 const verificarRol = (roles) => {
   return (req, res, next) => {
     if (!req.rol) {
-      return res.status(403).json({ message: 'Se requiere autenticación completa' });
+      return res.status(403).json({ 
+        success: false,
+        message: 'Se requiere autenticación completa' 
+      });
     }
 
     if (roles.includes(req.rol)) {
       next();
     } else {
       res.status(403).json({ 
+        success: false,
         message: 'No tiene permisos para acceder a este recurso' 
       });
     }
@@ -65,6 +94,7 @@ const verificarUsuarioActivo = async (req, res, next) => {
 
     if (!usuario) {
       return res.status(403).json({ 
+        success: false,
         message: 'Usuario no encontrado o inactivo' 
       });
     }
@@ -75,6 +105,7 @@ const verificarUsuarioActivo = async (req, res, next) => {
   } catch (error) {
     console.error('Error al verificar usuario activo:', error);
     res.status(500).json({ 
+      success: false,
       message: 'Error al verificar el estado del usuario' 
     });
   }
@@ -90,6 +121,7 @@ const verificarAccesoSucursal = (req, res, next) => {
     // Verificar si el usuario pertenece a esa sucursal
     if (req.sucursalId != req.params.id) {
       return res.status(403).json({ 
+        success: false,
         message: 'No tiene acceso a esta sucursal' 
       });
     }

@@ -45,6 +45,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+
+// Configurar CORS
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 // Iniciar el servidor
 async function startServer() {
   try {
