@@ -1,4 +1,6 @@
 # Comandos Esenciales de Git
+git status
+git add .
 
 ## Configuración Inicial
 
