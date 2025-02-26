@@ -1,0 +1,11 @@
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+   cd "C:\Users\david.DESKTOP-JC0UQP0\OneDrive\Desktop\Nueva carpeta\hamburgueseria-app\backend"
+   cd "C:\Users\david.DESKTOP-JC0UQP0\OneDrive\Desktop\Nueva carpeta\hamburgueseria-app\frontend"
