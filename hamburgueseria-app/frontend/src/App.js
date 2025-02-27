@@ -11,6 +11,8 @@ import Unauthorized from './pages/auth/Unauthorized';
 import AdminDashboard from './pages/admin/Dashboard';
 import UsuariosList from './pages/admin/usuarios/UsuariosList';
 import SucursalesList from './pages/admin/sucursales/SucursalesList';
+import NuevaSucursal from './pages/admin/sucursales/NuevaSucursal';
+import EditarSucursal from './pages/admin/sucursales/EditarSucursal';
 import ProductosList from './pages/admin/productos/ProductosList';
 import CategoriasList from './pages/admin/categorias/CategoriasList';
 import IngredientesList from './pages/admin/ingredientes/IngredientesList';
@@ -29,6 +31,8 @@ function App() {
           <Route path="/admin/*" element={<PrivateRoute allowedRoles={['administrador']} />}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="sucursales" element={<SucursalesList />} />
+            <Route path="sucursales/nuevo" element={<NuevaSucursal />} />
+            <Route path="sucursales/editar/:id" element={<EditarSucursal />} />
             <Route path="usuarios" element={<UsuariosList />} />
             <Route path="productos" element={<ProductosList />} />
             <Route path="categorias" element={<CategoriasList />} />
