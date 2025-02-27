@@ -20,11 +20,34 @@ const UsuarioController = {
         consulta.sucursal = req.usuario.sucursal;
       }
       
+      // Aplicar filtros de búsqueda
+      const { rol, sucursal, estado, buscar } = req.query;
+      
       // Si se especifica una sucursal en la consulta y el usuario es administrador
-      if (req.query.sucursal && req.usuario.rol === 'administrador') {
-        consulta.sucursal = req.query.sucursal;
+      if (sucursal && req.usuario.rol === 'administrador') {
+        consulta.sucursal = sucursal;
       }
-
+      
+      // Filtrar por rol si se especifica
+      if (rol) {
+        consulta.rol = rol;
+      }
+      
+      // Filtrar por estado si se especifica
+      if (estado) {
+        consulta.estado = estado;
+      }
+      
+      // Buscar por nombre o usuario
+      if (buscar) {
+        consulta.$or = [
+          { nombre: { $regex: buscar, $options: 'i' } },
+          { usuario: { $regex: buscar, $options: 'i' } }
+        ];
+      }
+      
+      console.log('Consulta aplicada:', consulta); // Para depuración
+      
       const usuarios = await Usuario.find(consulta)
         .select('-contrasena')
         .populate('sucursal', 'nombre direccion');
