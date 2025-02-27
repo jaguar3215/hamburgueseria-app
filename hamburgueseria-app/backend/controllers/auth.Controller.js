@@ -126,8 +126,8 @@ const AuthController = {
   verificarToken: async (req, res) => {
     try {
       // El middleware de autenticación ya verificó el token
-      // Solo necesitamos devolver la información del usuario
-      const usuarioEncontrado = await Usuario.findById(req.usuario.id)
+      // Usamos req.usuarioId en lugar de req.usuario.id
+      const usuarioEncontrado = await Usuario.findById(req.usuarioId)
         .populate('sucursal')
         .select('-contrasena');
 

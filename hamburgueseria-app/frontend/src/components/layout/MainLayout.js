@@ -1,100 +1,93 @@
 import React, { useContext } from 'react';
-import { Container, Navbar, Nav, Button, Dropdown } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const MainLayout = ({ children }) => {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-  
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-  
-  // Determinar elementos de menú según el rol
-  const getMenuItems = () => {
-    if (!user) return null;
-    
-    switch (user.rol) {
-      case 'administrador':
-        return (
-          <>
-            <Nav.Link as={Link} to="/admin/dashboard">Dashboard</Nav.Link>
-            <Nav.Link as={Link} to="/admin/sucursales">Sucursales</Nav.Link>
-            <Nav.Link as={Link} to="/admin/usuarios">Usuarios</Nav.Link>
-            <Nav.Link as={Link} to="/admin/productos">Productos</Nav.Link>
-            <Nav.Link as={Link} to="/admin/categorias">Categorías</Nav.Link>
-            <Nav.Link as={Link} to="/admin/ingredientes">Ingredientes</Nav.Link>
-            <Nav.Link as={Link} to="/admin/reportes">Reportes</Nav.Link>
-          </>
-        );
-      case 'cajero':
-        return (
-          <>
-            <Nav.Link as={Link} to="/cajero/ventas">Ventas</Nav.Link>
-            <Nav.Link as={Link} to="/cajero/caja">Caja</Nav.Link>
-            <Nav.Link as={Link} to="/cajero/historial">Historial</Nav.Link>
-          </>
-        );
-      case 'cocinero':
-        return (
-          <>
-            <Nav.Link as={Link} to="/cocinero/pedidos">Pedidos</Nav.Link>
-            <Nav.Link as={Link} to="/cocinero/inventario">Inventario</Nav.Link>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
-  
-  return (
-    <div className="d-flex flex-column min-vh-100">
-      <Navbar bg="dark" variant="dark" expand="lg" className="mb-4">
-        <Container>
-          <Navbar.Brand as={Link} to="/">JQ Q Berraquera</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              {getMenuItems()}
-            </Nav>
-            <Nav>
-              {user && (
-                <Dropdown align="end">
-                  <Dropdown.Toggle variant="outline-light" id="dropdown-basic">
-                    {user.nombre || user.usuario}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item as="button" disabled>
-                      Rol: {user.rol}
-                    </Dropdown.Item>
-                    <Dropdown.Item as="button" disabled>
-                      Sucursal: {user.sucursal ? user.sucursal.nombre : 'N/A'}
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item as="button" onClick={handleLogout}>
-                      Cerrar Sesión
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      
-      <Container className="flex-grow-1 mb-4">
-        {children}
-      </Container>
-      
-      <footer className="bg-light py-3 mt-auto">
-        <Container className="text-center text-muted">
-          <small>Sistema de Gestión JQ Q Berraquera &copy; {new Date().getFullYear()}</small>
-        </Container>
-      </footer>
-    </div>
-  );
+ const { user, logout } = useContext(AuthContext);
+ const navigate = useNavigate();
+ const location = useLocation();
+
+ const handleLogout = () => {
+   logout();
+   navigate('/login');
+ };
+
+ const isActive = (path) => {
+   return location.pathname === path ? 'active' : '';
+ };
+
+ return (
+   <div className="d-flex flex-column min-vh-100">
+     <header>
+       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+         <div className="container">
+           <Link className="navbar-brand" to="/">JQ Q Berraquera</Link>
+           
+           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+             <span className="navbar-toggler-icon"></span>
+           </button>
+           
+           <div className="collapse navbar-collapse" id="navbarNav">
+             <ul className="navbar-nav me-auto">
+               {user?.rol === 'administrador' && (
+                 <>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/dashboard')}`} to="/admin/dashboard">Dashboard</Link>
+                   </li>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/sucursales')}`} to="/admin/sucursales">Sucursales</Link>
+                   </li>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/usuarios')}`} to="/admin/usuarios">Usuarios</Link>
+                   </li>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/productos')}`} to="/admin/productos">Productos</Link>
+                   </li>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/categorias')}`} to="/admin/categorias">Categorías</Link>
+                   </li>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/ingredientes')}`} to="/admin/ingredientes">Ingredientes</Link>
+                   </li>
+                   <li className="nav-item">
+                     <Link className={`nav-link ${isActive('/admin/reportes')}`} to="/admin/reportes">Reportes</Link>
+                   </li>
+                 </>
+               )}
+               
+               {/* Agregar los menús para cajero y cocinero según corresponda */}
+             </ul>
+             
+             {user && (
+               <div className="d-flex">
+                 <span className="navbar-text me-3">
+                   {user.nombre} | {user.sucursal?.nombre || 'Sin sucursal'}
+                 </span>
+                 <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
+                   Cerrar Sesión
+                 </button>
+               </div>
+             )}
+           </div>
+         </div>
+       </nav>
+     </header>
+     
+     <main className="flex-grow-1">
+       <div className="container py-4">
+         {children}
+       </div>
+     </main>
+     
+     <footer className="bg-light py-3 mt-auto">
+       <div className="container text-center">
+         <span className="text-muted">
+           Sistema de Gestión JQ Q Berraquera &copy; 2025
+         </span>
+       </div>
+     </footer>
+   </div>
+ );
 };
 
 export default MainLayout;
