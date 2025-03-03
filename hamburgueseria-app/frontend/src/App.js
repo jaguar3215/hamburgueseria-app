@@ -17,6 +17,7 @@ import NuevaSucursal from './pages/admin/sucursales/NuevaSucursal';
 import EditarSucursal from './pages/admin/sucursales/EditarSucursal';
 import ProductosList from './pages/admin/productos/ProductosList';
 import CategoriasList from './pages/admin/categorias/CategoriasList';
+import CategoriaForm from './pages/admin/categorias/CategoriaForm';
 import IngredientesList from './pages/admin/ingredientes/IngredientesList';
 import ReportesList from './pages/admin/reportes/ReportesList';
 
@@ -43,9 +44,13 @@ function App() {
             <Route path="usuarios/nuevo" element={<NuevoUsuario />} />
             <Route path="usuarios/editar/:id" element={<EditarUsuario />} />
             
+            {/* Rutas de categorías */}
+            <Route path="categorias" element={<CategoriasList />} />
+            <Route path="categorias/nuevo" element={<CategoriaForm />} />
+            <Route path="categorias/editar/:id" element={<CategoriaForm />} />
+            
             {/* Otras rutas */}
             <Route path="productos" element={<ProductosList />} />
-            <Route path="categorias" element={<CategoriasList />} />
             <Route path="ingredientes" element={<IngredientesList />} />
             <Route path="reportes" element={<ReportesList />} />
             
