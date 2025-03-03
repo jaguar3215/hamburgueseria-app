@@ -91,6 +91,48 @@ const ProductoController = {
   },
 
   /**
+   * Obtener productos por categoría
+   * @param {Object} req - Request con ID de categoría
+   * @param {Object} res - Response
+   */
+  obtenerPorCategoria: async (req, res) => {
+    try {
+      const { categoriaId } = req.params;
+      
+      // Verificar si la categoría existe
+      const categoriaExistente = await Categoria.findById(categoriaId);
+      if (!categoriaExistente) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Categoría no encontrada' 
+        });
+      }
+      
+      // Construir filtro incluyendo disponibilidad si se especifica
+      const filtro = { categoria: categoriaId };
+      
+      if (req.query.disponible !== undefined) {
+        filtro.disponible = req.query.disponible === 'true';
+      }
+      
+      const productos = await Producto.find(filtro)
+        .populate('categoria', 'nombre descripcion');
+      
+      return res.status(200).json({
+        success: true,
+        data: productos
+      });
+    } catch (error) {
+      console.error('Error en obtenerPorCategoria:', error);
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Error al obtener productos por categoría', 
+        error: error.message 
+      });
+    }
+  },
+
+  /**
    * Crear un nuevo producto
    * @param {Object} req - Request con datos del producto
    * @param {Object} res - Response
@@ -418,6 +460,52 @@ const ProductoController = {
       return res.status(500).json({ 
         success: false, 
         message: 'Error al actualizar opciones de ingredientes', 
+        error: error.message 
+      });
+    }
+  },
+  
+  /**
+   * Cambiar disponibilidad de un producto
+   * @param {Object} req - Request con ID de producto
+   * @param {Object} res - Response
+   */
+  cambiarDisponibilidad: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { disponible } = req.body;
+      
+      // Verificar si el producto existe
+      const productoExistente = await Producto.findById(id);
+      if (!productoExistente) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Producto no encontrado' 
+        });
+      }
+      
+      // Verificar que se proporcionó el estado de disponibilidad
+      if (disponible === undefined) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Se requiere especificar el estado de disponibilidad' 
+        });
+      }
+      
+      // Actualizar disponibilidad
+      productoExistente.disponible = disponible;
+      await productoExistente.save();
+      
+      return res.status(200).json({
+        success: true,
+        message: `Producto ${disponible ? 'habilitado' : 'deshabilitado'} exitosamente`,
+        data: productoExistente
+      });
+    } catch (error) {
+      console.error('Error en cambiarDisponibilidad:', error);
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Error al cambiar disponibilidad del producto', 
         error: error.message 
       });
     }

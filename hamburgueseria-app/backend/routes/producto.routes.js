@@ -19,6 +19,9 @@ router.use(verificarUsuarioActivo);
 // Obtener todos los productos
 router.get('/', ProductoController.obtenerTodos);
 
+// Obtener productos por categoría
+router.get('/categoria/:categoriaId', ProductoController.obtenerPorCategoria);
+
 // Obtener un producto específico por ID
 router.get('/:id', ProductoController.obtenerPorId);
 
@@ -33,5 +36,8 @@ router.delete('/:id', verificarRol(['administrador']), ProductoController.elimin
 
 // Actualizar opciones de ingredientes de un producto (solo administradores)
 router.put('/:id/opciones', verificarRol(['administrador']), ProductoController.actualizarOpciones);
+
+// Cambiar disponibilidad de un producto (administrador o cocinero)
+router.patch('/:id/disponibilidad', verificarRol(['administrador', 'cocinero']), ProductoController.cambiarDisponibilidad);
 
 module.exports = router;

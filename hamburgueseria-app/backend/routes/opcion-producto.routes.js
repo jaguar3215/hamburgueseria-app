@@ -19,6 +19,9 @@ router.use(verificarUsuarioActivo);
 // Obtener todas las opciones de producto
 router.get('/', OpcionProductoController.obtenerTodas);
 
+// Obtener todas las opciones de un producto específico
+router.get('/producto/:productoId', OpcionProductoController.obtenerPorProducto);
+
 // Obtener una opción de producto específica por ID
 router.get('/:id', OpcionProductoController.obtenerPorId);
 

@@ -44,6 +44,43 @@ const OpcionProductoController = {
   },
 
   /**
+   * Obtener todas las opciones de un producto específico
+   * @param {Object} req - Request con ID de producto
+   * @param {Object} res - Response
+   */
+  obtenerPorProducto: async (req, res) => {
+    try {
+      const { productoId } = req.params;
+      
+      // Verificar si el producto existe
+      const productoExistente = await Producto.findById(productoId);
+      if (!productoExistente) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Producto no encontrado' 
+        });
+      }
+      
+      // Obtener todas las opciones del producto
+      const opciones = await OpcionProducto.find({ producto: productoId })
+        .populate('producto', 'nombre precio_base')
+        .populate('ingrediente', 'nombre precio_adicional disponible stock');
+      
+      return res.status(200).json({
+        success: true,
+        data: opciones
+      });
+    } catch (error) {
+      console.error('Error en obtenerPorProducto:', error);
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Error al obtener opciones del producto', 
+        error: error.message 
+      });
+    }
+  },
+
+  /**
    * Obtener una opción de producto por ID
    * @param {Object} req - Request con ID de opción
    * @param {Object} res - Response
