@@ -4,8 +4,24 @@
   npm run build
     Bundles the app into static files for production.
 
+    finalizar el uso de un enderponid baquee
+
+    taskkillnetstat -ano | findstr :3001
+taskkill /PID [número_PID] /F
+ejemplo 
+taskkill /PID 7196 /F
+
   npm test
     Starts the test runner.
 
    cd "C:\Users\david.DESKTOP-JC0UQP0\OneDrive\Desktop\Nueva carpeta\hamburgueseria-app\backend"
    cd "C:\Users\david.DESKTOP-JC0UQP0\OneDrive\Desktop\Nueva carpeta\hamburgueseria-app\frontend"
+
+guardado del proyecto 
+
+
+   PS C:\Users\david.DESKTOP-JC0UQP0\OneDrive\Desktop\Nueva carpeta\hamburgueseria-app> 
+
+   git add . primero este 
+
+   git commit -m "Descripción del cambio"

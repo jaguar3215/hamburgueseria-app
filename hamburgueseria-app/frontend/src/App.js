@@ -19,6 +19,7 @@ import ProductosList from './pages/admin/productos/ProductosList';
 import CategoriasList from './pages/admin/categorias/CategoriasList';
 import CategoriaForm from './pages/admin/categorias/CategoriaForm';
 import IngredientesList from './pages/admin/ingredientes/IngredientesList';
+import IngredienteForm from './pages/admin/ingredientes/IngredienteForm';
 import ReportesList from './pages/admin/reportes/ReportesList';
 
 function App() {
@@ -49,9 +50,13 @@ function App() {
             <Route path="categorias/nuevo" element={<CategoriaForm />} />
             <Route path="categorias/editar/:id" element={<CategoriaForm />} />
             
+            {/* Rutas de ingredientes */}
+            <Route path="ingredientes" element={<IngredientesList />} />
+            <Route path="ingredientes/nuevo" element={<IngredienteForm />} />
+            <Route path="ingredientes/editar/:id" element={<IngredienteForm />} />
+            
             {/* Otras rutas */}
             <Route path="productos" element={<ProductosList />} />
-            <Route path="ingredientes" element={<IngredientesList />} />
             <Route path="reportes" element={<ReportesList />} />
             
             {/* Redirecciones */}

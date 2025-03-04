@@ -40,11 +40,17 @@ const ingredienteService = {
   // Obtener unidades de medida disponibles
   obtenerUnidadesMedida: () => {
     return [
-      { valor: 'gramos', etiqueta: 'Gramos' },
       { valor: 'unidades', etiqueta: 'Unidades' },
-      { valor: 'láminas', etiqueta: 'Láminas' },
+      { valor: 'lechugas', etiqueta: 'Lechugas' },
+      { valor: 'cebollas', etiqueta: 'Cebollas' },
+      { valor: 'bloques', etiqueta: 'Bloques' },
+      { valor: 'bolsas', etiqueta: 'Bolsas' },
+      { valor: 'paquetes', etiqueta: 'Paquetes' },
+      { valor: 'laminas', etiqueta: 'Láminas' },
+      { valor: 'kilos', etiqueta: 'Kilogramos' },
+      { valor: 'gramos', etiqueta: 'Gramos' },
       { valor: 'mililitros', etiqueta: 'Mililitros' },
-      { valor: 'porciones', etiqueta: 'Porciones' }
+      { valor: 'litros', etiqueta: 'Litros' }
     ];
   }
 };
