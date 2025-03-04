@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Añadido PATCH y OPTIONS
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use(express.json());
@@ -45,12 +46,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-
-// Configurar CORS
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
 // Iniciar el servidor
 async function startServer() {
   try {

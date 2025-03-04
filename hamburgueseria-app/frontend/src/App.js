@@ -16,6 +16,8 @@ import SucursalesList from './pages/admin/sucursales/SucursalesList';
 import NuevaSucursal from './pages/admin/sucursales/NuevaSucursal';
 import EditarSucursal from './pages/admin/sucursales/EditarSucursal';
 import ProductosList from './pages/admin/productos/ProductosList';
+import ProductoForm from './pages/admin/productos/ProductoForm';
+import ProductoOpciones from './pages/admin/productos/ProductoOpciones';
 import CategoriasList from './pages/admin/categorias/CategoriasList';
 import CategoriaForm from './pages/admin/categorias/CategoriaForm';
 import IngredientesList from './pages/admin/ingredientes/IngredientesList';
@@ -55,8 +57,13 @@ function App() {
             <Route path="ingredientes/nuevo" element={<IngredienteForm />} />
             <Route path="ingredientes/editar/:id" element={<IngredienteForm />} />
             
-            {/* Otras rutas */}
+            {/* Rutas de productos */}
             <Route path="productos" element={<ProductosList />} />
+            <Route path="productos/nuevo" element={<ProductoForm />} />
+            <Route path="productos/editar/:id" element={<ProductoForm />} />
+            <Route path="productos/:id/opciones" element={<ProductoOpciones />} />
+            
+            {/* Otras rutas */}
             <Route path="reportes" element={<ReportesList />} />
             
             {/* Redirecciones */}
